@@ -52,7 +52,7 @@ public class AuthControllerIT {
     static void init(){
         loginRequest = new LoginRequest();
         loginRequest.setEmail("user@yopmail.com");
-        //loginRequest.setPassword("passer");
+        //loginRequest.setPassword("passer"); // comment
         signupRequest = new SignupRequest();
         signupRequest.setFirstName("John");
         signupRequest.setLastName("Doe");
