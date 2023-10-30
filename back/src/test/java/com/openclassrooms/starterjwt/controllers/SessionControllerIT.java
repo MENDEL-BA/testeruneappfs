@@ -1,32 +1,34 @@
 package com.openclassrooms.starterjwt.controllers;
 
 import com.openclassrooms.starterjwt.dto.SessionDto;
-import com.openclassrooms.starterjwt.mapper.SessionMapper;
-import com.openclassrooms.starterjwt.payload.request.LoginRequest;
-import com.openclassrooms.starterjwt.payload.request.SignupRequest;
 import com.openclassrooms.starterjwt.repository.SessionRepository;
-import com.openclassrooms.starterjwt.services.SessionService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,13 +37,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SessionControllerIT {
 
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
-    private SessionRepository sessionRepository;
+    private static SessionRepository sessionRepository;
 
     public SessionDto sessionDto;
 
@@ -61,6 +64,7 @@ class SessionControllerIT {
     @Test
     @DisplayName("Creation de Session")
     @WithMockUser("user@yopmail.com")
+    @Order(1)
     void testCreateSession() throws Exception {
                 mockMvc
                 .perform(post("/api/session/")
@@ -82,6 +86,7 @@ class SessionControllerIT {
 
     @Test
     @DisplayName("Ajout de participant à une Session sans se connecter")
+    @Order(2)
     void testAddParticipateToSessionSansConeecter() throws Exception {
         mockMvc
                 .perform(post("/api/session/2/participate/1")
@@ -92,6 +97,7 @@ class SessionControllerIT {
     @Test
     @DisplayName("Recuperation de Session")
     @WithMockUser("user@yopmail.com")
+    @Order(3)
     void testFindAllSession() throws Exception {
         mockMvc
                 .perform(get("/api/session/")
@@ -99,12 +105,13 @@ class SessionControllerIT {
                         .content(sessionDtoJacksonTester.write(sessionDto).getJson()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name", is(sessionDto.getName())))
-                .andExpect(jsonPath("$[0].id", is(2))).andReturn().getResponse();
+                .andExpect(jsonPath("$[0].description", is(sessionDto.getDescription()))).andReturn().getResponse();
 
     }
 
     @Test
     @DisplayName("Recuperation de Session sans se connecter")
+    @Order(4)
     void testFindAllSessionWithoutConnected() throws Exception {
         mockMvc
                 .perform(get("/api/session/")
@@ -116,6 +123,7 @@ class SessionControllerIT {
 
     @Test
     @DisplayName("Recuperation d'une Session sans se connecter")
+    @Order(5)
     void testFindOneSessionWithoutConnected() throws Exception {
         mockMvc
                 .perform(get("/api/session/9900090")
@@ -127,6 +135,7 @@ class SessionControllerIT {
 
     @Test
     @DisplayName("Creation de Session Sans se connecter")
+    @Order(6)
     void testCreateWhithoutConnectedSession() throws Exception {
         mockMvc
                 .perform(post("/api/session/")
@@ -139,12 +148,19 @@ class SessionControllerIT {
     @Test
     @DisplayName("Suppression de Session sans se connecter")
     //@WithMockUser("user@yopmail.com")
+    @Order(7)
     void testDeletedSessionWhithoutConnection() throws Exception {
         mockMvc
                 .perform(delete("/api/session/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(sessionDtoJacksonTester.write(sessionDto).getJson()))
                 .andExpect(status().isUnauthorized()).andReturn().getResponse();
+    }
+
+
+    @AfterAll
+    static void deleteAll(){
+        sessionRepository.deleteAll();
     }
 
 }
