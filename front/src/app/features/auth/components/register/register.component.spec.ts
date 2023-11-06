@@ -9,10 +9,31 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { expect } from '@jest/globals';
 
 import { RegisterComponent } from './register.component';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { RegisterRequest } from '../../interfaces/registerRequest.interface';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
+  let authService : AuthService;
+  let router : Router;
+  let fb : FormBuilder;
+
+  let registerRequest: RegisterRequest = {
+    email: 'user@yopmail.com',
+    firstName: 'userName',
+    lastName : 'lastName',
+    password : 'passer'
+  }
+
+  let badRegisterRequest: RegisterRequest = {
+    email: 'user@@yopmail.com',
+    firstName: '',
+    lastName : '',
+    password : 'pa'
+  }
+
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -25,6 +46,16 @@ describe('RegisterComponent', () => {
         MatFormFieldModule,
         MatIconModule,
         MatInputModule
+      ],
+      providers: [
+        AuthService,
+        { 
+          provide: 
+            Router, 
+            useValue: { 
+              navigate: jest.fn()
+             } 
+        },
       ]
     })
       .compileComponents();
@@ -32,6 +63,9 @@ describe('RegisterComponent', () => {
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    authService = TestBed.inject(AuthService);
+    router = TestBed.inject(Router);
+    fb = TestBed.inject(FormBuilder);
   });
 
   it('should create', () => {
