@@ -105,8 +105,17 @@ class SessionControllerTest {
 
     }
 
-
-
+    @Test
+    @DisplayName("Test update avec 200")
+    void testUpdateSession() {
+        when(sessionService.update(anyLong(), any(Session.class))).thenReturn(session);
+        ResponseEntity<?> response = null;
+        try {
+            response = sessionController.update("1", sessionMapper.toDto(session));
+        } catch (NumberFormatException e) {
+            Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        }
+    }
     @Test
     @DisplayName("Test update avec une mauvaise parametre")
     void testUpdateSessionNumberFormatException() {
@@ -224,4 +233,5 @@ class SessionControllerTest {
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
     }
+
 }

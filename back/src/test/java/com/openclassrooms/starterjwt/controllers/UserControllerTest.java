@@ -76,7 +76,7 @@ public class UserControllerTest {
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
     @Test
-    @DisplayName("Test save user")
+    @DisplayName("Test delete user")
     void testSaveUser() {
         Authentication authentication = mock(Authentication.class);
         SecurityContext securityContext = mock(SecurityContext.class);
@@ -89,6 +89,28 @@ public class UserControllerTest {
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(userService, times(1)).delete(1L);
+    }
+
+    @Test
+    @DisplayName("Test delete user not found")
+    void testSaveUserNotFound() {
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(userDetails);
+        when(userService.findById(Long.valueOf(id))).thenReturn(null);
+
+        ResponseEntity<?> response = userController.save("1");
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("Test delete user whith not a number")
+    void testSaveNumberFormatException() {
+        ResponseEntity<?> responseEntity = userController.save("invalid");
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
 }

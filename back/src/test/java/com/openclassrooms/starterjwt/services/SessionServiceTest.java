@@ -21,12 +21,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 public class SessionServiceTest {
@@ -110,7 +113,7 @@ public class SessionServiceTest {
     @DisplayName("Test de suppression de session par un ID Nulle")
     void testDeleteSessionByNullIDTest(){
         doThrow(IllegalArgumentException.class).when(sessionRepository).deleteById(null);
-        Throwable throwable = Assertions.assertThrows(
+        Throwable throwable = assertThrows(
                 IllegalArgumentException.class, ()-> sessionRepository.deleteById(null));
 
         Assertions.assertEquals(IllegalArgumentException.class, throwable.getClass());
@@ -143,9 +146,24 @@ public class SessionServiceTest {
     void testAddParticipateToSessionWithParamIsNullTest(){
         doReturn(Optional.empty()).when(sessionRepository).findById(anyLong());
         doReturn(Optional.empty()).when(userRepository).findById(anyLong());
-        Throwable throwable = Assertions.assertThrows(
+        Throwable throwable = assertThrows(
                 NotFoundException.class, ()-> sessionService.participate(1L, 12L));
         Assertions.assertEquals(NotFoundException.class, throwable.getClass());
+    }
+
+    @Test
+    @DisplayName("Test d'ajout un participant a une session dans lequel il participe dejà")
+    void testParticipateWithAlreadyParticipatingUserTest(){
+        when(sessionRepository.findById(1L)).thenReturn(Optional.of(session));
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        session.getUsers().add(user);
+
+        assertThrows(BadRequestException.class, () -> sessionService.participate(1L, 1L));
+
+        verify(sessionRepository).findById(1L);
+        verify(userRepository).findById(1L);
+        verify(sessionRepository, never()).save(any());
     }
 
     @Test
@@ -160,7 +178,7 @@ public class SessionServiceTest {
     @DisplayName("Test noLongerParticipate with BadRequestException")
     void testNoLongerParticipateBadRequestTest() {
         doReturn(Optional.of(session)).when(sessionRepository).findById(anyLong());
-        Throwable exception = Assertions.assertThrows(
+        Throwable exception = assertThrows(
                 BadRequestException.class, () -> {
                     sessionService.noLongerParticipate(1L, 12L);
                 });
@@ -172,7 +190,7 @@ public class SessionServiceTest {
     @DisplayName("Test noLongerParticipate throw NoFoundException")
     void testNoLongerParticipateNotFoundToSessionTest() {
         doReturn(Optional.empty()).when(sessionRepository).findById(anyLong());
-        Throwable exception = Assertions.assertThrows(
+        Throwable exception = assertThrows(
                 NotFoundException.class, () -> {
                     sessionService.noLongerParticipate(1L, 1L);
                 });
@@ -192,7 +210,7 @@ public class SessionServiceTest {
     void testDeleteUserIdNullTest() {
         doThrow(IllegalArgumentException.class).when(sessionRepository).deleteById(null);
 
-        Throwable exception = Assertions.assertThrows(
+        Throwable exception = assertThrows(
                 IllegalArgumentException.class, () -> {
                     sessionService.delete(null);
                 });
