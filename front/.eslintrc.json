@@ -16,7 +16,8 @@
       },
       "extends": [
         "plugin:@angular-eslint/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:cypress/recommended"
       ],
       "rules": {
         "@angular-eslint/directive-selector": [
@@ -44,7 +45,10 @@
       "extends": [
         "plugin:@angular-eslint/template/recommended"
       ],
-      "rules": {}
+      "rules": {},
+        "globals": {
+          "cy": true
+        }
     }
   ]
 }
