@@ -1,0 +1,9 @@
+[
+  {
+    "id": 1,
+    "lastName": "John",
+    "firstName": "Doe",
+    "createdAt": "2023-11-12T18:25:43",
+    "updatedAt": "2023-11-12T18:34:56"
+  }
+]
