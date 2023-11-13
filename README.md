@@ -50,6 +50,7 @@ cd existing_repo
 git checkout develop
 run npm install
 run ng s
+npx cypess open
 ```
 ## The documentaion app
 
