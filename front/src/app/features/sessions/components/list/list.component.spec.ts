@@ -70,9 +70,4 @@ describe('ListComponent', () => {
       expect(sessions).toEqual(mockSessions);
     });
   });
-/*
-  it('should have user', () => {
-    const user = component.user;
-    expect(user).toEqual(mockSessionInformation);
-  });*/
 });

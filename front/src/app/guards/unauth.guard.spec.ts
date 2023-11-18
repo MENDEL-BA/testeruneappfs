@@ -18,14 +18,14 @@ describe('UnAuthGuard', () => {
   });
 
   it('Rediregider vers rentals si user est connecte', () => {
-    const canActivate = unAuthGuard.canActivate();
+    let canActivate = unAuthGuard.canActivate();
     expect(canActivate).toBeFalsy();
     expect(router.navigate).toHaveBeenCalledWith(['rentals']);
   });
 
   it('canActivate return true if user est pas connecte', () => {
     sessionService.isLogged = false;
-    const canActivate = unAuthGuard.canActivate();
+    let canActivate = unAuthGuard.canActivate();
     expect(canActivate).toBeTruthy();
   });
 });

@@ -164,8 +164,8 @@ describe('FormComponent Update', () => {
   test('Update avec un bon formulaire,redirection sessions avec le bon message', async () => {
     jest.spyOn(component, 'submit');
     jest.spyOn(serviceAPISession, 'update');
-    const navigateSpy = jest.spyOn(router, 'navigate');
-    const form = fixture.debugElement.query(By.css('form'));
+    let navigateSpy = jest.spyOn(router, 'navigate');
+    let form = fixture.debugElement.query(By.css('form'));
     fixture.ngZone!.run(() => {
       form.triggerEventHandler('submit', {});
     });

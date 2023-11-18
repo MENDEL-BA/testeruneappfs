@@ -48,13 +48,13 @@ describe('AppComponent', () => {
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
+    let fixture = TestBed.createComponent(AppComponent);
+    let app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
   it('Redirection vers la page de login',(async () => {
-    const toolbar = fixture.debugElement.queryAll(
+    let toolbar = fixture.debugElement.queryAll(
       By.css('span')
     );
     toolbar[1].nativeElement.click();
@@ -64,7 +64,7 @@ describe('AppComponent', () => {
 
 
   it('Redirection vers la page register',(async () => {
-    const toolbar = fixture.debugElement.queryAll(
+    let toolbar = fixture.debugElement.queryAll(
       By.css('span')
     );
     toolbar[2].nativeElement.click();

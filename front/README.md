@@ -1,29 +1,61 @@
 # Yoga
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
-
+- [ ] [Prerequis](https://gitlab.com/-/experiment/new_project_readme_content:02dabd3766913935689dcab8513bbde9?https://gitlab.com/MENDEL-BA/clinic_api_v3/-/settings/integrations)
+```
+Angular >=14
+Node >=16
+```
 ## Start the project
 
 Git clone:
 
 > git clone https://github.com/OpenClassrooms-Student-Center/P5-Full-Stack-testing
 
-Go inside folder:
+Aller dans le dossier:
 
 > cd yoga
 
-Install dependencies:
+Installer les dependences:
 
 > npm install
 
-Launch Front-end:
+Lancer le Front-end:
 
 > npm run start;
 
+## Run application Test Front-end:
+# Avec Jest
+```
+cd existing_repo
+git checkout develop
+```
 
-## Ressources
+Génération du Rapport de Couverture de Code (Coverage)
+Pour générer le rapport de couverture de code, exécutez la commande suivante :
+```
+bash
+Copy code
+npm test -- --coverage
+```
+Les rapports de couverture seront générés dans le répertoire coverage/ à la racine du projet.
+Ouvrez le fichier index.html dans ce répertoire pour visualiser les résultats.
 
-### Mockoon env 
+# Avec Cyspress
+Lancer le projet en mode developpement
+```
+cd existing_repo/frontend
+npm start
+```
+Dans un autre terminal, exécutez la commande suivante pour ouvrir l'interface graphique de Cypress :
+```
+npm run cypress:open
+```
+Exécution des Tests en headless (Sans Interface Graphique)
+Pour exécuter les tests en mode headless, utilisez la commande suivante :
+```
+npm run cypress:run
+```
 
 ### Postman collection
 
@@ -49,24 +81,14 @@ By default the admin account is:
 
 #### E2E
 
-Launching e2e test:
+Lancer les e2e test:
 
 > npm run e2e
 
-Generate coverage report (you should launch e2e test before):
+Genrerer le coverage report (you should launch e2e test before):
 
 > npm run e2e:coverage
 
-Report is available here:
+Report disponible:
 
 > front/coverage/lcov-report/index.html
-
-#### Unitary test
-
-Launching test:
-
-> npm run test
-
-for following change:
-
-> npm run test:watch

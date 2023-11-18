@@ -20,13 +20,13 @@ describe('AuthGard', ()=>{
 
     it('Redirection vers login ', ()=>{
         sessionService.isLogged = false;
-        const canActivate = authGuard.canActivate();
+        let canActivate = authGuard.canActivate();
         expect(canActivate).toBeFalsy();
         expect(router.navigate).toHaveBeenCalledWith(['login']);
     });
 
     it('canActivate return true si user est connected', () => {
-        const canActivate = authGuard.canActivate();
+        let canActivate = authGuard.canActivate();
         expect(canActivate).toBeTruthy();
     });
 });

@@ -90,13 +90,12 @@ describe('MeComponent', () => {
   });
 
   //Test de suppression de compte
-  it('Test delecte account with message \'Your account has been deleted ! \' if account is deleted', fakeAsync(async () => {
-    var logOutSpy = jest.spyOn(serviceSession, 'logOut');
-    var deletedSpy = jest.spyOn(uservice, 'delete');
-    //var openBarSpy = jest.spyOn(bar, 'open');
-    var routerSpy = jest.spyOn(router, 'navigate');
+  it('Test delete account with message \'Your account has been deleted ! \' if account is deleted', fakeAsync(async () => {
+    let logOutSpy = jest.spyOn(serviceSession, 'logOut');
+    let deletedSpy = jest.spyOn(uservice, 'delete');
+    let routerSpy = jest.spyOn(router, 'navigate');
 
-    var button = fixture.debugElement.query(
+    let button = fixture.debugElement.query(
       By.css('button[color="warn"]')
     );
 
